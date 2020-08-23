@@ -4,9 +4,13 @@ NAME
 
 SYNOPSIS
 
-       dbatch [ Slurm options ] [ --check <user_script> ]
-                                [ --max-retry=<number of restart> ]
-                                script [args...]
+       Ludion is an Cloud-hybrid framework allowing the user to spawn and
+       register services both from on premise HPC Resources, or on
+       the cloud or his/her own Workstation.
+
+       It is composed of a centralized dashboard available on Internet and
+       a few components to be installed on the desired machines to
+       call Ludion services.
 
 DESCRIPTION
 
