@@ -1,7 +1,7 @@
 Welcome to Ludion's documentation!
 ====================================
 
-.. image:: images/healing_workflow.png
+.. image:: images/ludion.png
 
 
 .. toctree::
