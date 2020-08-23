@@ -19,7 +19,7 @@ AUTHOR
 
 REPORTING BUGS
 
-       Report decimate bugs to help@hpc.kaust.edu.sa
+       Report ludion bugs to help@hpc.kaust.edu.sa
 
 
 COPYRIGHT
