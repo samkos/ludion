@@ -5,66 +5,42 @@ Installation
 Requirements
 ------------
 
-*Decimate* should work with any cluster based on Unix operating systems which provides
-Python 2.7 and using SLURM as a scheduler. It also depends on the python packages
-numpy, pandas and clustershell.
-
-In a further release, *Decimate* is planned to be compatible with Python 3 and no
+*Ludion* should work with any cluster/supercomputer or any resource based on Unix operating system which has Python installed and can reach AWS resources.
 dependency on numpy will be imposed.
 
 Distribution
 ------------
 
-*Decimate* is an open-source project distributed under the BSD
+*Ludion* is an open-source project distributed under the BSD
 2-Clause "Simplified" License which means that many possibilities are
-offered to the end user including the fact to embed *Decimate* in
+offered to the end user including the fact to embed *Ludion* in
 one own software.
 
 Its stable production branch is available via github at
-https://github.com/KAUST-KSL/decimate, but its latest production and
-development branch can be found at https://github.com/samkos/decimate
+https://github.com/KAUST-KSL/ludion, but its latest production and
+development branch can be found at https://github.com/samkos/ludion
 
-most up todate documentation about *Decimate* can be browsed at
-http://decimate.readthedocs.io.
-
-
-Installing *Decimate* using PIP
--------------------------------
-
-Installing *Decimate* as root using PIP
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-To install *Decimate* as a standard Python package using PIP [#]_ as root::
-
-    $ pip install decimate
-
-Or alternatively, using the source tarball::
-
-    $ pip install decimate-0.9.x.tar.gz
+most up todate documentation about *Ludion* can be browsed at
+http://ludion.readthedocs.io.
 
 
-.. _install-pip-user:
+Installing *Ludion* 
+--------------------
+*Ludion* is composed of:
+- a centralized dashboard, hosted on a set of AWS serverless Resources,
+  deployed thanks to AWS Amplify
+- a few executables to be installed on the connected Resources to
+  connect to this centralized dashboard.
 
-Installing *Decimate* as user using PIP
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Installing *Ludion* Centralized Services
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+To be added
 
-To install *Decimate* as a standard Python package using PIP as an user::
+.. Deployment of the Dashboard:
 
-    $ pip install --user decimate
+Installing *Ludion* local components
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Or alternatively, using the source tarball::
-
-    $ pip install --user decimate-0.9.x.tar.gz
-
-Then, you just need to update your ``PYTHONPATH`` environment variable to be
-able to import the library and ``PATH`` to easily use the :ref:`tools`::
-
-    $ export PYTHONPATH=$PYTHONPATH:~/.local/lib
-    $ export PATH=$PATH:~/.local/bin
-
-Configuration files are installed in ``~/.local/etc/decimate`` and are
-automatically loaded before system-wide ones (for more info about supported
-user config files, please see the :ref:`decimate-config` config section).
 
 .. _install-source:
 
@@ -74,11 +50,11 @@ Source
 Current source is available on  Github, use the following command to retrieve
 the latest stable version from the repository::
 
-    $ git clone -b prod git@github.com:samkos/decimate.git
+    $ git clone git@github.com:samkos/ludion.git
 
 and for the development version::
 
-    $ git clone -b dev git@github.com:samkos/decimate.git
+    $ git clone -b dev git@github.com:samkos/ludion.git
 
 
 .. [#] pip is a tool for installing and managing Python packages, such as
