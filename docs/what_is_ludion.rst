@@ -2,34 +2,25 @@
  What is *Ludion*?
 =====================
 
-Developped by the KAUST Supercomputing Laboratory (KSL), *Ludion* is
-a SLURM extension written in Python allowing the user to handle jobs
-per hundreds in an efficient and transparent way. In this context, the
-constraint limiting the number of jobs per users is completely
-masked. The time consuming burden of managing thousands of jobs by
-hand is also alleviated by making available to the user the concept of
-workflow gathering a set of jobs that he can manipulate as a whole.
+Developped by the KAUST Supercomputing Laboratory (KSL), *Ludion* is a
+service-oriented hybrid architecture, well-adapted to launch, monitor
+and steer interactive services spawned either on on-premise HPC
+resources, on user laptop and workstation or in the Cloud.  Based on
+AWS serverless components, requiring no special priviledges to be
+deployed, it consists in a catalog of services and a dashboard hosted
+in the Cloud and a set of commands to install on the Resources to
+cover. From a running job, a user can register and
+publish his new service and any relevant data related on a centralized
+dashboard.
+
 
 *Ludion* is released as an Open Source Software under BSD Licence.
-It is available at 
+It is available at http://github.org/samkos/ludion
 
 Features
 --------
 
 *Ludion* allows a user to:
 
-- xxxx
-
-xxx
----
-  
-In case of ...
-
-.. image:: images/healing_workflow.png
-
-Fully user configurable environment
------------------------------------
-	   
-*Ludion* does not require any super priviledge. It can be
-installed by a regular user as long as he possess an AWS
-account to install *Ludion* centralized services.
+- "publish" his own services on a centralized dashboard,
+- 
