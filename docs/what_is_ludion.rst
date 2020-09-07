@@ -22,5 +22,12 @@ Features
 
 *Ludion* allows a user to:
 
-- "publish" his own services on a centralized dashboard,
-- 
+- "publish" his own service via a centralized web interface and API.
+  This service can be hosted either on-premise HPC, on his local
+  workstation or in the cloud.
+- dynamically update any information judged of interest about
+  the published service
+- make user-defined widget appear on the website in the view related
+  to a given service. When clicked-on or filled and submitted, these
+  widget trigger immediate action from the service hosted on
+  resource.
