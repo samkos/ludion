@@ -45,10 +45,7 @@ and for the development version::
 
 
 Installing *Ludion* Centralized Services
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Based on a *Cloud Formation* script,
-*Ludion* should be straightforward to deploy on AWS Cloud.
+----------------------------------------
 
 *Ludion* relies on the following serverless AWS Components:
 
@@ -59,10 +56,71 @@ Based on a *Cloud Formation* script,
 - *AWS Amplify* to deploy the dashboard and its
   corresponding *GraphQL* interface via *AWS Appsync*
 
-To be completed soon.
+Based on a *Cloud Formation* script, *Ludion* should be
+straightforward to deploy on AWS Cloud. We are still working on a
+fully automated installation, learning at the same time how to master
+*Cloud Formation* for this case.
 
-.. Deployment of the Dashboard:
+We are presenting here a semi-automated installation using shell
+scripts and some amplify command that can not be scripted yet.
 
+Prerequisites
+^^^^^^^^^^^^^
+
+This installation supposes that the current user
+
+- has created an account on AWS
+
+and that he installed on a local machine
+
+- the aws cli (based on python)
+- a recent version of nodeJS
+- aws amplify
+
+Deployment of the Dashboard in AWS cloud:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Let's deploy a version of *Ludion* that we will tag **dev**. Here are reproduced
+below the steps to install the centralized dashboard of *Ludion* built on
+serverless AWS components. At this stage, this steps are either automated either
+still manual. For the manual parts, accepting all the default choices is
+only required.
+
+
+1. Clone the latest stable version of *Ludion* from  Github:
+
+   $ git clone git@github.com:samkos/ludion.git LUDION_DEV
+
+2. Initialize the amplify environment
+
+   $ cd LUDION_DEV/ludion
+   
+   $ sh ../install/amplify_init.sh dev
+
+3. Add the GraphQL API, and link to an authentication via cognito user pool
+
+   $ amplify add api
+
+   365
+   
+   y
+   
+   amplify_schema/schema.graphql
+
+
+   $ amplify add auth
+
+4. push the environment to the cloud
+   
+   $ sh ../install/amplify_push.sh
+
+5. create the website   
+
+   $ amplify hosting add
+
+   $ amplify publish
+
+   
 Installing *Ludion* local components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -31,7 +31,7 @@ Supercomputing Laboratory.
    what_is_ludion
    install
    API
-   use cases
+   use_cases
    
 
 

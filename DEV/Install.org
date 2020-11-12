@@ -4,7 +4,7 @@
 #python -m compileall -f .
 cd /home/samy/LUDION_PUBLISHED/docs
 make html;
-\rm rf ~/public_html/DOCS/ludion
+\rm -rf ~/public_html/DOCS/ludion
 mkdir -p ~/public_html/DOCS/ludion
 cp -R _build/html ~/public_html/DOCS/ludion
 make man
