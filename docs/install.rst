@@ -36,6 +36,7 @@ Installing *Ludion*
 
 Current source is available on  Github, use the following command to retrieve
 the latest stable version from the repository:
+
 ::
     $ git clone git@github.com:samkos/ludion.git
 
@@ -133,47 +134,48 @@ only required.
   $ amplify add api
   
 .. image:: images/amplifyAddApi.png
-::
-  $
-   
+
 4. Link to an authentication via cognito user pool
 ::
   $ amplify add auth
 
 .. image:: images/amplifyAddAuth.png
-::
-  $
-  
+
 5. push the environment to the cloud
 ::
   $ sh ../install/amplify_push.sh
 
 .. image:: images/amplifyPush1.png
-::
-  ...
-  Updating resources in the cloud. This may take a few minutes...
-  ...
+
+...
+Updating resources in the cloud. This may take a few minutes...
+...
 
 .. image:: images/amplifyPush2.png
   
-6. create the website locally   
+6. create the website locally
 ::
   $ npm install
 .. image:: images/npmInstall.png
-::
-  $
-   
-7. pushing it to the cloud
+
+7. preparing the hosting place for the dashboard in the cloud
 ::
   $ amplify hosting add
 
 .. image:: images/amplifyHostingAdd.png
-  
+
+8. pushing it to the cloud
 ::
   $ amplify publish
-
+  
 .. image:: images/amplifyPublish1.png
+
+continuing
+  
 .. image:: images/amplifyPublish2.png
+
+continuing
+  
 .. image:: images/amplifyPublish3.png
 	   
 
