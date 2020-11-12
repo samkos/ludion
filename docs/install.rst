@@ -35,14 +35,9 @@ Installing *Ludion*
   connected Resources to connect to this centralized dashboard.
 
 Current source is available on  Github, use the following command to retrieve
-the latest stable version from the repository::
-
+the latest stable version from the repository:
+::
     $ git clone git@github.com:samkos/ludion.git
-
-and for the development version::
-
-    $ git clone -b dev git@github.com:samkos/ludion.git
-
 
 Installing *Ludion* Centralized Services
 ----------------------------------------
@@ -70,6 +65,8 @@ Prerequisites
 This installation supposes that the current user
 
 - has created an account on AWS
+- has set up the AWS Email Service, SES in order to be able to send
+  a mail from AWS
 
 and that he installed on a local machine
 
@@ -80,7 +77,7 @@ and that he installed on a local machine
 Deployment of the Dashboard in AWS cloud:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Let's deploy a version of *Ludion* that we will tag **dev**. Here are reproduced
+Let's deploy a version of *Ludion* that we will tag **prod**. Here are reproduced
 below the steps to install the centralized dashboard of *Ludion* built on
 serverless AWS components. At this stage, this steps are either automated either
 still manual. For the manual parts, accepting all the default choices is
@@ -88,45 +85,104 @@ only required.
 
 
 1. Clone the latest stable version of *Ludion* from  Github:
-
-   $ git clone git@github.com:samkos/ludion.git LUDION_DEV
+::
+   $ git clone git@github.com:samkos/ludion.git LUDION_TEST
 
 2. Initialize the amplify environment
+::
+   $ cd LUDION_TEST/ludion
+   $ sh ../install/amplify_init.sh test
 
-   $ cd LUDION_DEV/ludion
+   Note: It is recommended to run this command from the root of your app directory
+
+   For more information on AWS Profiles, see:
+   https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html
+
+   Adding backend environment test to AWS Amplify Console app: d26x5q23er3ls4
+   ⠴ Initializing project in the cloud...
+
+   CREATE_IN_PROGRESS UnauthRole                 AWS::IAM::Role             Thu Nov 12 2020 15:30:08 GMT+0300 (Arabian Standard Time)               
+   CREATE_IN_PROGRESS AuthRole                   AWS::IAM::Role             Thu Nov 12 2020 15:30:08 GMT+0300 (Arabian Standard Time)               
+   CREATE_IN_PROGRESS amplify-ludion-test-152955 AWS::CloudFormation::Stack Thu Nov 12 2020 15:30:03 GMT+0300 (Arabian Standard Time) User Initiated
+   ⠼ Initializing project in the cloud...
+
+   ...
+
+   ✔ Successfully created initial AWS cloud resources for deployments.
+   ✔ Initialized provider successfully.
+   ✔ All resources are updated in the cloud
+
+
+   Initialized your environment successfully.
+
+   Your project has been successfully initialized and connected to the cloud!
+
+   Some next steps:
+   "amplify status" will show you what you've added already and if it's locally configured or deployed
+   "amplify add <category>" will allow you to add features like user login or a backend API
+   "amplify push" will build all your local backend resources and provision it in the cloud
+   "amplify console" to open the Amplify Console and view your project status
+   "amplify publish" will build all your local backend and frontend resources (if you have hosting category added) and provision it in the cloud
+
+   Pro tip:
+   Try "amplify add api" to create a backend API and then "amplify publish" to deploy everything
+
+
+3. Add the GraphQL API, providing the model schema from amplify_schema/schema.graphql and setting the expiration time of the API key to 365 days not to have to change it too often.
+::
+  $ amplify add api
+  
+.. image:: images/amplifyAddApi.png
+::
+  $
    
-   $ sh ../install/amplify_init.sh dev
+4. Link to an authentication via cognito user pool
+::
+  $ amplify add auth
 
-3. Add the GraphQL API, and link to an authentication via cognito user pool
+.. image:: images/amplifyAddAuth.png
+::
+  $
+  
+5. push the environment to the cloud
+::
+  $ sh ../install/amplify_push.sh
 
-   $ amplify add api
+.. image:: images/amplifyPush1.png
+::
+  ...
+  Updating resources in the cloud. This may take a few minutes...
+  ...
 
-   365
+.. image:: images/amplifyPush2.png
+  
+6. create the website locally   
+::
+  $ npm install
+.. image:: images/npmInstall.png
+::
+  $
    
-   y
-   
-   amplify_schema/schema.graphql
+7. pushing it to the cloud
+::
+  $ amplify hosting add
 
+.. image:: images/amplifyHostingAdd.png
+  
+::
+  $ amplify publish
 
-   $ amplify add auth
+.. image:: images/amplifyPublish1.png
+.. image:: images/amplifyPublish2.png
+.. image:: images/amplifyPublish3.png
+	   
 
-4. push the environment to the cloud
-   
-   $ sh ../install/amplify_push.sh
-
-5. create the website   
-
-   $ amplify hosting add
-
-   $ amplify publish
-
-   
 Installing *Ludion* local components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 Executables are gathered in the *API/unix/* directory. Adding this
-directory to *PATH* variable complete the installation of
+directory to *PATH* variable completes the installation of
 *Ludion*,
 
 
