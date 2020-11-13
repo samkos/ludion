@@ -1,0 +1,21 @@
+import { combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form';
+
+import authReducer from './authReducer';
+import tableReducer from './tableReducer';
+import oilReducer  from './oilReducer';
+import commReducer from './commReducer';
+import uiReducer   from './uiReducer';
+
+import player from './player';
+import operation from './operation';
+
+export default combineReducers({
+    auth: authReducer,
+    comm: commReducer,
+    form: formReducer,
+    oil:  oilReducer,
+    table: tableReducer,
+    ui: uiReducer
+
+});

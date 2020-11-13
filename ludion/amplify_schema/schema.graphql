@@ -1,0 +1,14 @@
+type Service @model {
+     id:ID!
+     description: String
+     machine: String
+     host: String
+     status: String
+     step: String
+     user: String
+     endpoint: String
+     instance: String
+     jobid: String
+     service: String
+     timestamp: String
+}

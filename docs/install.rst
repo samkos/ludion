@@ -179,12 +179,13 @@ continuing
 .. image:: images/amplifyPublish3.png
 	   
 
-Installing *Ludion* local components
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+9. Installing *Ludion* local components
+::
+  $ sh ../install/ludion_cli_configure.sh
 
-
-Executables are gathered in the *API/unix/* directory. Adding this
+At this point the ludion cli unix commands should be fully configured in
+the *../API/unix/* directory. Adding this
 directory to *PATH* variable completes the installation of
-*Ludion*,
+*Ludion*
 
 

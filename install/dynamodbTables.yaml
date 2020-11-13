@@ -1,0 +1,357 @@
+
+Description:  ludion lambda functions
+Parameters: 
+  endpointParameter: 
+    Type: String
+    Default: "https://lkqojjdaljaxjczlukmt5im6oa.appsync-api.us-east-1.amazonaws.com/graphql"
+    Description: GraphQL endpoint to update service table
+  apikeyParameter: 
+    Type: String
+    Default: "da2-jjyzssrahngwrdnnopxfvwiz6a"
+    Description: GraphQL apikey to update service table
+  serviceTableParameter:
+    Type: String
+    Default: "arn:aws:dynamodb:us-east-1:500547172594:table/Service-haznahjhi5h5dh2qclst3vfrg4-test"
+  userNameParameter:
+    Type: String
+    Default: "ludionUser"
+Resources:
+  ludionAdmin:
+    Type: AWS::IAM::User
+    Properties: 
+      UserName: !Ref userNameParameter
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AmazonCognitoDeveloperAuthenticatedIdentities"
+        - "arn:aws:iam::aws:policy/AmazonCognitoReadOnly"
+        - "arn:aws:iam::aws:policy/AmazonCognitoPowerUser"
+        - "arn:aws:iam::aws:policy/AmazonESCognitoAccess"
+  CFNKeys:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      UserName: !Ref userNameParameter  
+  ludionAdminRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        -
+          PolicyName: ludionAdminCognitoAccess
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Sid: AllowUpdate
+                Effect: Allow
+                Action:
+                  - "dynamodb:PutItem"
+                  - "dynamodb:UpdateItem"
+                  - "dynamodb:GetItem"
+                Resource: 
+                  - !Ref serviceTableParameter
+        -
+          PolicyName: ludionAdminMailAccess
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Sid: AllowUpdate
+                Effect: Allow
+                Action:
+                  - "dynamodb:PutItem"
+                Resource: 
+                  - !GetAtt Mail.Arn
+  dynamoDBFullAccessRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        -
+          PolicyName: ServiceAccess
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Sid: AllowUpdate
+                Effect: Allow
+                Action:
+                  - "dynamodb:BatchGetItem"
+                  - "dynamodb:ConditionCheckItem"
+                  - "dynamodb:PutItem"
+                  - "dynamodb:Scan"
+                  - "dynamodb:Query"
+                  - "dynamodb:DescribeStream"
+                  - "dynamodb:UpdateItem"
+                  - "dynamodb:DescribeTimeToLive"
+                  - "dynamodb:DescribeGlobalTableSettings"
+                  - "dynamodb:DescribeTable"
+                  - "dynamodb:GetShardIterator"
+                  - "dynamodb:DescribeGlobalTable"
+                  - "dynamodb:GetItem"
+                  - "dynamodb:GetRecords"
+                  - "dynamodb:DescribeStream"
+                  - "dynamodb:GetShardIterator"
+                  - "dynamodb:ListStreams"
+                Resource:
+                  - !GetAtt serviceDetail.Arn
+                  - Fn::GetAtt: [ serviceDetail , StreamArn ]
+  serviceDetail:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE
+  Mail:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE
+  serviceDetailTracker:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      BatchSize: 1
+      Enabled: True
+      EventSourceArn:
+        Fn::GetAtt: [ serviceDetail , StreamArn ]
+      FunctionName:
+        Fn::GetAtt: [ serviceTrackFunction , Arn ]
+      StartingPosition: LATEST
+  sendMailFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: update Service table 
+      Handler: index.handler
+      Role: !GetAtt dynamoDBFullAccessRole.Arn
+      Runtime: nodejs10.x
+      Timeout: 120
+      Environment:
+        Variables:
+          serviceDetailTable: !GetAtt serviceDetail.Arn
+      Code:
+        ZipFile: |
+           /* nothing yet */
+           var aws = require('aws-sdk');
+                
+           exports.handler = async (event, context) => {
+               var subject, mailTo;
+               //console.log('Received event:', JSON.stringify(event, null, 2));
+               for (const record of event.Records) {
+                   console.log(record.eventID);
+                   console.log(record.eventName);
+                   console.log('DynamoDB Record: %j', record.dynamodb);
+                   subject = record.dynamodb["NewImage"]["subject"]["S"];
+                   mailTo = record.dynamodb["NewImage"]["to"]["S"];
+                   body = record.dynamodb["NewImage"]["body"]["S"];
+               }
+               
+               
+              var params = {
+                   Destination: {
+                       ToAddresses: [ mailTo ] 
+                   },
+                   Message: {
+                       Body: {
+                           Text: { Data:   body },
+                           Html: { Data:   body }
+                       },
+                       Subject: { Data: subject
+                       }
+                   },
+                   Source: "samuel.kortas@gmail.com"
+               };
+
+               
+               console.log("sending mail");
+               const response = await ses.sendEmail(params).promise();
+               console.log(response);
+               
+               return `Successfully processed ${event.Records.length} records.`;
+           };
+
+  serviceTrackFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: update Service table 
+      Handler: index.handler
+      Role: !GetAtt dynamoDBFullAccessRole.Arn
+      Runtime: nodejs10.x
+      Timeout: 120
+      Environment:
+        Variables:
+          endpoint: !Ref endpointParameter
+          apikey: !Ref apikeyParameter
+      Code:
+        ZipFile: |
+          var field_to_publish = [ "id", "description", "machine","host","status","step","user","endpoint","instance","jobid","service" ];
+          var today = new Date();
+          var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+          var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+          var dateTime = date+'/'+time;
+
+          const host_endpoint = process.env['endpoint'], apiKey = process.env['apikey'];
+
+          const https = require('https');
+          const AWS = require("aws-sdk");
+          const urlParse = require("url").URL;
+          const region = process.env.AWS_REGION;
+          const endpoint = new urlParse(appsyncUrl).hostname.toString();
+
+          function stringify(obj) {
+              if (typeof obj !== "object" || Array.isArray(obj)){
+                  // not an object, stringify using native function
+
+                  return JSON.stringify(obj);
+              }
+              // Implements recursive object serialization according to JSON spec
+              // but without quotes around the keys.
+              let props = Object
+                  .keys(obj)
+                  .map(key => `${key}:${stringify(obj[key])}`)
+                  .join(",");
+              return `{${props}}`;
+          }
+
+
+          exports.handler = async (event, context) => {
+              //console.log('Received event:', JSON.stringify(event, null, 2));
+
+              
+              for (const record of event.Records) {
+                  console.log(`${record.eventID}\n${record.eventName}\nDynamoDB Record:${record.dynamodb}`);
+                  
+                  var item = { timestamp: Date.now().toString()};
+                  
+                  if (record.eventName === "INSERT" || record.eventName === "MODIFY") {
+                      
+                      item = {id: dateTime};
+                      
+                      for (let field  of field_to_publish) {
+          		
+                        	if (record.dynamodb["NewImage"].hasOwnProperty(field)) {
+                      	    console.log(`for field ${field} :`, record.dynamodb["NewImage"][field]);
+                      	    item[field] = record.dynamodb["NewImage"][field]["S"];
+                      	}
+                      	else {
+                      	    item[field] = "UNKNOWN";
+                      	}	    
+                          
+                      } 
+                  }
+                  
+                  if (record.eventName === "REMOVE") {
+                      item = {"id": record.dynamodb["Keys"]["id"]["S"]};
+                      
+                  }
+
+          	console.log("at the end of reading dynamodb field item",item);
+          	
+          	
+          	const req = new AWS.HttpRequest(host_endpoint, process.env.AWS_REGION);
+          	
+          	const actionService =
+          	      record.eventName === "INSERT" ? "createService" : (
+          		  record.eventName === "MODIFY" ? "updateService" : (
+          		      record.eventName === "REMOVE" ? "deleteService" : "????"));
+          	
+          	const mutation = `
+                          mutation addService {
+                            ${actionService}(input: ${stringify(item)}) {
+                              ${field_to_publish.join("\n")}\ntimestamp\ncreatedAt\nupdatedAt
+                            }
+                          }
+                      `;
+          	
+          	console.log("mutation built",mutation);
+          	
+          	req.method = "POST";
+          	req.headers.host = endpoint;
+          	req.headers["Content-Type"] = "application/json";
+          	req.body = JSON.stringify({
+                      query: mutation,
+                      operationName: "addService",
+                      variables: item
+          	});
+          	
+          	if (apiKey) {
+                      req.headers["x-api-key"] = apiKey;
+          	} else {
+                      const signer = new AWS.Signers.V4(req, "appsync", true);
+                      signer.addAuthorization(AWS.config.credentials, AWS.util.date.getDate());
+          	}
+          	
+          	const data = await new Promise((resolve, reject) => {
+                      const httpRequest = https.request({ ...req, host: endpoint }, (result) => {
+          		result.on('data', (data) => {
+                              resolve(JSON.parse(data.toString()));
+          		});
+                      });
+          	    
+                      httpRequest.write(req.body);
+                      httpRequest.end();
+          	});
+              }
+              
+              return "ok";
+
+          };
+  testFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: update Service table 
+      Handler: index.handler
+      Role: !GetAtt dynamoDBFullAccessRole.Arn
+      Runtime: nodejs10.x
+      Timeout: 120
+      Environment:
+        Variables:
+          serviceDetailTable: !GetAtt serviceDetail.Arn
+          Message: "hello"
+          endpoint: !Ref endpointParameter
+      Code:
+        ZipFile: |
+          /* nothing yet */
+          exports.handler = (event, context) => {
+             console.log(process.env['Message'])
+             console.log(process.env['serviceDetailTable'])
+             console.log(process.env['endpoint'])
+          };
+Outputs : 
+  ludionAdminAccessKeyId:
+    Description: "Ludion Admin AccessKeyId"
+    Value: !Ref CFNKeys
+  ludionAdminSecretAccessKey:
+    Description: "Ludion Admin SecretAccessKey"
+    Value: !GetAtt CFNKeys.SecretAccessKey
+

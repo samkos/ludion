@@ -1,0 +1,4 @@
+{ "accessKeyId": "__accessKeyId__",
+  "secretAccessKey": "__secretAccessKey__",
+  "region": "__region__"
+}

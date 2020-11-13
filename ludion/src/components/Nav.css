@@ -1,0 +1,41 @@
+.child>button {
+   height:40px;
+   width:200px;
+}
+
+.choices {
+   display:flex;
+   flex-direction:column;
+   height:100%;
+   overflow-y: scroll;
+   align-items: flex-start;
+}
+
+.choicecategories {
+   padding:0px 0px 0px 0px;
+}
+
+.choicescontainer{
+   display:flex;
+   flex-direction:column;
+   height:100%;
+   justify-content: flex-start;
+}
+
+.bigcontainer{
+   display:flex;
+   flex-direction:row;
+   height: 93vh;
+}
+
+.logcontainer{
+   width:90%;
+   height:93vh;
+}
+
+.navButton { width:20%}
+
+.video-react {
+   background-color: white;
+}
+

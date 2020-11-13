@@ -1,0 +1,9 @@
+.pure-table-striped tr:hover td {
+    background-color: yellow;
+}
+
+
+
+.pure-table-striped tr:nth-child(2n-1):hover td {
+    background-color: yellow ;
+}
