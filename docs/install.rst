@@ -87,7 +87,7 @@ only required.
 
 1. Clone the latest stable version of *Ludion* from  Github:
 ::
-   $ git clone git@github.com:samkos/ludion.git LUDION_TEST
+   $ git clone https://github.com/samkos/ludion.git LUDION_TEST
 
 2. Initialize the amplify environment
 ::
