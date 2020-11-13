@@ -5,8 +5,9 @@ if [[ -z  $1 ]]; then
     echo example
     echo    amplify_init prod
     exit 1
-    echo $1 > .stack_name
 fi
+
+echo $1 > .stack_name
 
 set -e
 IFS='|'
