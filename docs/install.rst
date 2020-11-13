@@ -38,7 +38,7 @@ Current source is available on  Github, use the following command to retrieve
 the latest stable version from the repository:
 
 ::
-    $ git clone git@github.com:samkos/ludion.git
+    $ git clone https://github.com/samkos/ludion.git
 
 Installing *Ludion* Centralized Services
 ----------------------------------------
@@ -92,7 +92,7 @@ only required.
 2. Initialize the amplify environment
 ::
    $ cd LUDION_TEST/ludion
-   $ sh ../install/amplify_init.sh test
+   $ bash ../install/amplify_init.sh test
 
    Note: It is recommended to run this command from the root of your app directory
 
@@ -143,7 +143,7 @@ only required.
 
 5. push the environment to the cloud
 ::
-  $ sh ../install/amplify_push.sh
+  $ bash ../install/amplify_push.sh
 
 .. image:: images/amplifyPush1.png
 
@@ -181,7 +181,7 @@ continuing
 
 9. Installing *Ludion* local components
 ::
-  $ sh ../install/ludion_cli_configure.sh
+  $ bash ../install/ludion_cli_configure.sh
 
 At this point the ludion cli unix commands should be fully configured in
 the *../API/unix/* directory. Adding this
