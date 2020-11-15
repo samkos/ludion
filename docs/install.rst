@@ -72,7 +72,7 @@ and that he installed on a local machine
 
 - the aws cli (based on python)
 - a recent version of nodeJS
-- aws amplify
+- aws amplify (version>=4.32.1)
 
 Deployment of the Dashboard in AWS cloud:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

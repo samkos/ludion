@@ -1,0 +1,3 @@
+#!/bin/sh
+
+(cd $LUDION_CMD_DIR; node -r esm $0.js "$@")
