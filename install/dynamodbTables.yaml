@@ -28,7 +28,8 @@ Resources:
   CFNKeys:
     Type: AWS::IAM::AccessKey
     Properties:
-      UserName: !Ref userNameParameter  
+      UserName: !Ref userNameParameter
+    DependsOn: ludionAdmin
   ludionAdminRole:
     Type: AWS::IAM::Role
     Properties:

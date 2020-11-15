@@ -24,8 +24,8 @@ AWSCLOUDFORMATIONCONFIG="{\
 \"profileName\":\"default\"\
 }"
 AMPLIFY="{\
-\"projectName\":\"ludion\",\
-\"envName\":\"test\",\
+\"projectName\":\"ludion-$1\",\
+\"envName\":\"$1\",\
 \"defaultEditor\":\"none\"\
 }"
 FRONTEND="{\
