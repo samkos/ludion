@@ -35,10 +35,9 @@ Installing *Ludion*
   connected Resources to connect to this centralized dashboard.
 
 Current source is available on  Github, use the following command to retrieve
-the latest stable version from the repository:
-
+the latest stable version from the repository.
 ::
-    $ git clone https://github.com/samkos/ludion.git
+  $ git clone https://github.com/samkos/ludion.git
 
 Installing *Ludion* Centralized Services
 ----------------------------------------
