@@ -12,7 +12,7 @@ echo endpoint=$endpoint; echo apikey=$apikey; echo region=$region; echo STACK=$S
 TEMPLATEFILE=$PWD/../install/dynamodbTables.yaml
 aws  cloudformation create-stack --template-body file://$TEMPLATEFILE --capabilities CAPABILITY_IAM --capabilities CAPABILITY_NAMED_IAM  --stack-name $STACK --parameters ParameterKey=endpointParameter,ParameterValue=$endpoint  ParameterKey=apikeyParameter,ParameterValue=$apikey ParameterKey=userNameParameter,ParameterValue=ludionAdmin$STACK ParameterKey=serviceTableParameter,ParameterValue=$serviceTableArn
 
-aws  cloudformation update-stack --template-body file://$TEMPLATEFILE --capabilities CAPABILITY_IAM --capabilities CAPABILITY_NAMED_IAM  --stack-name $STACK --parameters ParameterKey=endpointParameter,ParameterValue=$endpoint  ParameterKey=apikeyParameter,ParameterValue=$apikey ParameterKey=userNameParameter,ParameterValue=ludionAdmin$STACK ParameterKey=serviceTableParameter,ParameterValue=$serviceTableArn
+#aws  cloudformation update-stack --template-body file://$TEMPLATEFILE --capabilities CAPABILITY_IAM --capabilities CAPABILITY_NAMED_IAM  --stack-name $STACK --parameters ParameterKey=endpointParameter,ParameterValue=$endpoint  ParameterKey=apikeyParameter,ParameterValue=$apikey ParameterKey=userNameParameter,ParameterValue=ludionAdmin$STACK ParameterKey=serviceTableParameter,ParameterValue=$serviceTableArn
 
 
 AccessKeyId=`aws  cloudformation describe-stacks --stack-name $STACK  --query  "Stacks[0].Outputs[?OutputKey=='ludionAdminAccessKeyId'].OutputValue" --output text`
@@ -28,6 +28,7 @@ UserPoolId=`jq -r ".auth.$authKey.output.UserPoolId" ../ludion/amplify/backend/a
 AppClientIDWeb=`jq -r ".auth.$authKey.output.AppClientIDWeb" ../ludion/amplify/backend/amplify-meta.json`
 sed "s|__region__|$region|g;s|__GraphQLAPIEndpointOutput__|$GraphQLAPIEndpointOutput|g;s|__GraphQLAPIKeyOutput__|$GraphQLAPIKeyOutput|g;s|__IdentityPoolId__|$IdentityPoolId|g;s|__UserPoolId__|$UserPoolId|g" ../install/aws-exports.js.template >  ../API/unix/aws-exports.js
 cat ../API/unix/aws-exports.js
+
 
 echo compiling Ludion cli
 
