@@ -14,7 +14,8 @@ Parameters:
     Default: "arn:aws:dynamodb:us-east-1:500547172594:table/Service-haznahjhi5h5dh2qclst3vfrg4-test"
   userNameParameter:
     Type: String
-    Default: "ludionUser"
+  serviceTableParameter:
+    Type: String
 Resources:
   ludionAdmin:
     Type: AWS::IAM::User
@@ -30,45 +31,30 @@ Resources:
     Properties:
       UserName: !Ref userNameParameter
     DependsOn: ludionAdmin
-  ludionAdminRole:
-    Type: AWS::IAM::Role
+  ludionAdminGroup:
+    Type: AWS::IAM::Group
+  ludionAdminUsers:
+    Type: AWS::IAM::UserToGroupAddition
     Properties:
-      Path: /
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
+      GroupName: !Ref ludionAdminGroup
+      Users: [!Ref userNameParameter]
+    DependsOn: ludionAdmin
+  ludionAdminPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      Groups: [!Ref ludionAdminGroup ]
+      PolicyName: ludionAdminPolicy
+      PolicyDocument:
+        Version: '2012-10-17'
         Statement:
-          -
-            Effect: Allow
-            Principal:
-              Service: lambda.amazonaws.com
-            Action: sts:AssumeRole
-      Policies:
-        -
-          PolicyName: ludionAdminCognitoAccess
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              -
-                Sid: AllowUpdate
-                Effect: Allow
-                Action:
-                  - "dynamodb:PutItem"
-                  - "dynamodb:UpdateItem"
-                  - "dynamodb:GetItem"
-                Resource: 
-                  - !Ref serviceTableParameter
-        -
-          PolicyName: ludionAdminMailAccess
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              -
-                Sid: AllowUpdate
-                Effect: Allow
-                Action:
-                  - "dynamodb:PutItem"
-                Resource: 
-                  - !GetAtt Mail.Arn
+          - Effect: Allow
+            Action:
+              - "dynamodb:PutItem"
+              - "dynamodb:UpdateItem"
+              - "dynamodb:GetItem"
+            Resource: 
+              - !Ref serviceTableParameter
+              - !GetAtt Mail.Arn
   dynamoDBFullAccessRole:
     Type: AWS::IAM::Role
     Properties:

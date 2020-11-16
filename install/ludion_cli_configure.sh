@@ -4,10 +4,15 @@ STACK=`cat .stack_name`
 endpoint=`jq -r ".api.ludion$STACK.output.GraphQLAPIEndpointOutput" ../ludion/amplify/backend/amplify-meta.json`
 apikey=`jq -r ".api.ludion$STACK.output.GraphQLAPIKeyOutput" ../ludion/amplify/backend/amplify-meta.json`
 region=`jq -r ".providers.awscloudformation.Region" ../ludion/amplify/backend/amplify-meta.json`
+apiId=`aws appsync list-graphql-apis | jq -r " .graphqlApis |.[] | select( .name==\"ludion$STACK-$STACK\" ).apiId"`
+serviceTableArn=arn:aws:dynamodb:$region:500547172594:table/Service-$apiId-$STACK
 
-echo endpoint=$endpoint; echo apikey=$apikey; echo region=$region; echo STACK=$STACK
+echo endpoint=$endpoint; echo apikey=$apikey; echo region=$region; echo STACK=$STACK; echo apiId=$apiId; echo serviceTableArn=$serviceTableArn
+
 TEMPLATEFILE=$PWD/../install/dynamodbTables.yaml
-aws  cloudformation create-stack --template-body file://$TEMPLATEFILE --capabilities CAPABILITY_IAM --capabilities CAPABILITY_NAMED_IAM  --stack-name $STACK --parameters ParameterKey=endpointParameter,ParameterValue=$endpoint  --parameters ParameterKey=apikeyParameter,ParameterValue=$apikey --parameters ParameterKey=userNameParameter,ParameterValue=ludionAdmin$STACK
+aws  cloudformation create-stack --template-body file://$TEMPLATEFILE --capabilities CAPABILITY_IAM --capabilities CAPABILITY_NAMED_IAM  --stack-name $STACK --parameters ParameterKey=endpointParameter,ParameterValue=$endpoint  ParameterKey=apikeyParameter,ParameterValue=$apikey ParameterKey=userNameParameter,ParameterValue=ludionAdmin$STACK ParameterKey=serviceTableParameter,ParameterValue=$serviceTableArn
+
+aws  cloudformation update-stack --template-body file://$TEMPLATEFILE --capabilities CAPABILITY_IAM --capabilities CAPABILITY_NAMED_IAM  --stack-name $STACK --parameters ParameterKey=endpointParameter,ParameterValue=$endpoint  ParameterKey=apikeyParameter,ParameterValue=$apikey ParameterKey=userNameParameter,ParameterValue=ludionAdmin$STACK ParameterKey=serviceTableParameter,ParameterValue=$serviceTableArn
 
 
 AccessKeyId=`aws  cloudformation describe-stacks --stack-name $STACK  --query  "Stacks[0].Outputs[?OutputKey=='ludionAdminAccessKeyId'].OutputValue" --output text`

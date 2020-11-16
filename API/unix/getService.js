@@ -45,7 +45,7 @@ if (id) {
 	Key: {
             "id": {"S": id}, 
 	}, 
-	TableName: "Service"
+	TableName: "Service-i6vpxtoycfctfgs52wl72o3ypi-prod"
     };
     dynamodb.getItem(params, function(err, data) {
 	if (err) {
