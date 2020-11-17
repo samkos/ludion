@@ -16,13 +16,13 @@ echo ss $STACK $TEMPLATEFILE \"--capabilities CAPABILITY_IAM --capabilities CAPA
 
 echo aws  cloudformation create-stack --template-body file://$TEMPLATEFILE --capabilities CAPABILITY_IAM --capabilities CAPABILITY_NAMED_IAM  --stack-name $STACK --parameters ParameterKey=endpointParameter,ParameterValue=$endpoint  ParameterKey=apikeyParameter,ParameterValue=$apikey ParameterKey=userNameParameter,ParameterValue=ludionAdmin$STACK ParameterKey=serviceTableParameter,ParameterValue=$serviceTableArn
 
-stack_already_created=`aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE | jq -r '.StackSummaries | .[] | select(.StackName=="prod").StackStatus'`
-stack_already_updated=`aws cloudformation list-stacks --stack-status-filter UPDATE_COMPLETE | jq -r '.StackSummaries | .[] | select(.StackName=="prod").StackStatus'`
+stack_already_created=`aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE | jq -r '.StackSummaries | .[] | select(.StackName=="$STACK").StackStatus'`
+stack_already_updated=`aws cloudformation list-stacks --stack-status-filter UPDATE_COMPLETE | jq -r '.StackSummaries | .[] | select(.StackName=="$STACK").StackStatus'`
 
 
 echo stack_already_updated:$stack_already_updated, stack_already_created:$stack_already_created
 
-if [[ -z $stack_already_created || -z $stack_already_created ]]; then
+if [[ -n $stack_already_created || -n $stack_already_created ]]; then
     echo Stack $STACK already exists... updating it
     aws  cloudformation update-stack --template-body file://$TEMPLATEFILE --capabilities CAPABILITY_IAM --capabilities CAPABILITY_NAMED_IAM  --stack-name $STACK --parameters ParameterKey=endpointParameter,ParameterValue=$endpoint  ParameterKey=apikeyParameter,ParameterValue=$apikey ParameterKey=userNameParameter,ParameterValue=ludionAdmin$STACK ParameterKey=serviceTableParameter,ParameterValue=$serviceTableArn
 else
