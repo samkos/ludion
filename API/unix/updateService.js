@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 const { commandLineBase, checkArgv, SERVICE_REQUIRED, documentClient } = require('./helpers');
-const { serviceTable, aws_project_region } = require('./aws-exports').default;
+const { serviceDetailTable, aws_project_region } = require('./aws-exports').default;
 
 var argv = commandLineBase()
     .usage('Usage: updateService --service <serviceName> --instance <instanceName>'
@@ -28,7 +28,7 @@ var { id } =  argv;
 var update = "SET ";
 
 var params = {
-    TableName: serviceTable,
+    TableName: serviceDetailTable,
     ExpressionAttributeNames: { }, 
     ExpressionAttributeValues: { },
     Key: { id: id },

@@ -211,7 +211,7 @@ Resources:
           const AWS = require("aws-sdk");
           const urlParse = require("url").URL;
           const region = process.env.AWS_REGION;
-          const endpoint = new urlParse(appsyncUrl).hostname.toString();
+          const endpoint = new urlParse(host_endpoint).hostname.toString();
 
           function stringify(obj) {
               if (typeof obj !== "object" || Array.isArray(obj)){
