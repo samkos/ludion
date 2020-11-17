@@ -56,9 +56,12 @@ const jsonToTable = require('json-to-table');
 const tableToTxt = require('text-table');
 
 API.graphql(graphqlOperation(query))
-    .then(data => 
+    .then(data => {
+      console.log("data",data);
+      console.log("data.items",data.items);
       console.log(argv.json ? data.data.listServices.items :
-        tableToTxt(jsonToTable(data.data.listServices.items))))
+        tableToTxt(jsonToTable(data.data.listServices.items)))
+      })
     .catch(err => console.log({err}))
 
 

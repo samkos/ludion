@@ -9,11 +9,14 @@ const LUDION_ADMINISTRATORS = ',samy,kortass,';
 // const LUDION_ADMINISTRATORS = '';
 var is_admin = LUDION_ADMINISTRATORS.indexOf(`,${process.env.USER},`)>-1;
 
+const { serviceTable, aws_project_region, aws_user_pools_id } = require('./aws-exports').default;
+
+
 
 // Load the AWS SDK for JS
 var AWS = require("aws-sdk");
 
-AWS.config.update({region: "us-east-1"});
+AWS.config.update({region: aws_project_region});
 AWS.config.loadFromPath('./service-updater.json');
 
 AWS.config.apiVersions = {
@@ -33,7 +36,7 @@ const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider;
 
 
 var params = {
-  UserPoolId: 'us-east-1_62kpV0ohT', /* required */
+  UserPoolId: aws_user_pools_id, /* required */
   // AttributesToGet: null,
   AttributesToGet: ['email'],
   // Filter: 'Username = "kortass"',

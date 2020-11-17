@@ -3,6 +3,8 @@
 // license that can be found in the LICENSE file.
 
 const { commandLineBase, checkArgv, SERVICE_REQUIRED } = require('./helpers');
+const { serviceTable, aws_project_region } = require('./aws-exports').default;
+
 
 var argv = commandLineBase()
     .usage('Usage: getService --service <serviceName> --instance <instanceName>'
@@ -31,7 +33,7 @@ if (argv.debug) {
 
 var AWS = require("aws-sdk");
 
-AWS.config.update({region: "us-east-1"});
+AWS.config.update({region: aws_project_region });
 AWS.config.loadFromPath('./service-updater.json');
 
 // Create the Service interface for DynamoDB
@@ -45,7 +47,7 @@ if (id) {
 	Key: {
             "id": {"S": id}, 
 	}, 
-	TableName: "Service-i6vpxtoycfctfgs52wl72o3ypi-prod"
+	TableName: serviceTable
     };
     dynamodb.getItem(params, function(err, data) {
 	if (err) {

@@ -4,6 +4,7 @@
 
 const { documentClient, commandLineBase, currentDateTime,
         checkArgv, SERVICE_REQUIRED } = require('./helpers');
+const { serviceTable, aws_project_region } = require('./aws-exports').default;
 
 var argv = commandLineBase()
     .usage('Usage: $0 --service [serviceName] --instance [instanceName]')
@@ -27,7 +28,7 @@ var description = argv.description ? argv.description : `Service ${service}`;
 var jobid = argv.jobid ? argv.jobid : currentDateTime();
 
 var params = {
-    TableName: "Service",
+    TableName: serviceTable,
     Item: {
       id: id,
       description: description,

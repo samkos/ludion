@@ -5,11 +5,15 @@ endpoint=`jq -r ".api.ludion$STACK.output.GraphQLAPIEndpointOutput" ../ludion/am
 apikey=`jq -r ".api.ludion$STACK.output.GraphQLAPIKeyOutput" ../ludion/amplify/backend/amplify-meta.json`
 region=`jq -r ".providers.awscloudformation.Region" ../ludion/amplify/backend/amplify-meta.json`
 apiId=`aws appsync list-graphql-apis | jq -r " .graphqlApis |.[] | select( .name==\"ludion$STACK-$STACK\" ).apiId"`
-serviceTableArn=arn:aws:dynamodb:$region:500547172594:table/Service-$apiId-$STACK
+serviceTable=Service-$apiId-$STACK
+serviceTableArn=arn:aws:dynamodb:$region:500547172594:table/$serviceTable
 
-echo endpoint=$endpoint; echo apikey=$apikey; echo region=$region; echo STACK=$STACK; echo apiId=$apiId; echo serviceTableArn=$serviceTableArn
+echo endpoint=$endpoint; echo apikey=$apikey; echo region=$region; echo STACK=$STACK; echo apiId=$apiId; echo serviceTable=$serviceTable; echo serviceTableArn=$serviceTableArn
 
 TEMPLATEFILE=$PWD/../install/dynamodbTables.yaml
+
+#ss $STACK $TEMPLATEFILE "--capabilities CAPABILITY_IAM --capabilities CAPABILITY_NAMED_IAM  --stack-name $STACK --parameters ParameterKey=endpointParameter,ParameterValue=$endpoint  ParameterKey=apikeyParameter,ParameterValue=$apikey ParameterKey=userNameParameter,ParameterValue=ludionAdmin$STACK ParameterKey=serviceTableParameter,ParameterValue=$serviceTableArn"
+
 aws  cloudformation create-stack --template-body file://$TEMPLATEFILE --capabilities CAPABILITY_IAM --capabilities CAPABILITY_NAMED_IAM  --stack-name $STACK --parameters ParameterKey=endpointParameter,ParameterValue=$endpoint  ParameterKey=apikeyParameter,ParameterValue=$apikey ParameterKey=userNameParameter,ParameterValue=ludionAdmin$STACK ParameterKey=serviceTableParameter,ParameterValue=$serviceTableArn
 
 #aws  cloudformation update-stack --template-body file://$TEMPLATEFILE --capabilities CAPABILITY_IAM --capabilities CAPABILITY_NAMED_IAM  --stack-name $STACK --parameters ParameterKey=endpointParameter,ParameterValue=$endpoint  ParameterKey=apikeyParameter,ParameterValue=$apikey ParameterKey=userNameParameter,ParameterValue=ludionAdmin$STACK ParameterKey=serviceTableParameter,ParameterValue=$serviceTableArn
@@ -26,16 +30,19 @@ GraphQLAPIKeyOutput=`jq -r ".api.ludion$STACK.output.GraphQLAPIKeyOutput" ../lud
 IdentityPoolId=`jq -r ".auth.$authKey.output.IdentityPoolId" ../ludion/amplify/backend/amplify-meta.json`
 UserPoolId=`jq -r ".auth.$authKey.output.UserPoolId" ../ludion/amplify/backend/amplify-meta.json`
 AppClientIDWeb=`jq -r ".auth.$authKey.output.AppClientIDWeb" ../ludion/amplify/backend/amplify-meta.json`
-sed "s|__region__|$region|g;s|__GraphQLAPIEndpointOutput__|$GraphQLAPIEndpointOutput|g;s|__GraphQLAPIKeyOutput__|$GraphQLAPIKeyOutput|g;s|__IdentityPoolId__|$IdentityPoolId|g;s|__UserPoolId__|$UserPoolId|g" ../install/aws-exports.js.template >  ../API/unix/aws-exports.js
+sed "s|__region__|$region|g;s|__serviceTable__|$serviceTable|g;s|__GraphQLAPIEndpointOutput__|$GraphQLAPIEndpointOutput|g;s|__GraphQLAPIKeyOutput__|$GraphQLAPIKeyOutput|g;s|__IdentityPoolId__|$IdentityPoolId|g;s|__UserPoolId__|$UserPoolId|g" ../install/aws-exports.js.template >  ../API/unix/aws-exports.js
 cat ../API/unix/aws-exports.js
 
+if [[ -d ../API/unix/node_modules ]]; then
+   echo Ludion cli already compiled...
+else
+    echo compiling Ludion cli
 
-echo compiling Ludion cli
-
-cd ../API/unix
-chmod +x  ./xxxService
-npm i
-export PATH=PATH:$PWD:$PATH
-export LUDION_CMD_DIR=$PWD
-cd -
+    cd ../API/unix
+    chmod +x  ./xxxService
+    npm i
+    export PATH=PATH:$PWD:$PATH
+    export LUDION_CMD_DIR=$PWD
+    cd -
+fi
 

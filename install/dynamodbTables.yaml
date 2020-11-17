@@ -3,15 +3,12 @@ Description:  ludion lambda functions
 Parameters: 
   endpointParameter: 
     Type: String
-    Default: "https://lkqojjdaljaxjczlukmt5im6oa.appsync-api.us-east-1.amazonaws.com/graphql"
     Description: GraphQL endpoint to update service table
   apikeyParameter: 
     Type: String
-    Default: "da2-jjyzssrahngwrdnnopxfvwiz6a"
     Description: GraphQL apikey to update service table
   serviceTableParameter:
     Type: String
-    Default: "arn:aws:dynamodb:us-east-1:500547172594:table/Service-haznahjhi5h5dh2qclst3vfrg4-test"
   userNameParameter:
     Type: String
   serviceTableParameter:
@@ -341,4 +338,6 @@ Outputs :
   ludionAdminSecretAccessKey:
     Description: "Ludion Admin SecretAccessKey"
     Value: !GetAtt CFNKeys.SecretAccessKey
-
+  serviceDetailTable:
+    Description: "Service detail Table"
+    Value: !GetAtt serviceDetailTable
