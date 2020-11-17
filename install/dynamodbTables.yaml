@@ -51,6 +51,7 @@ Resources:
               - "dynamodb:GetItem"
             Resource: 
               - !Ref serviceTableParameter
+              - !GetAtt serviceDetail.Arn
               - !GetAtt Mail.Arn
   dynamoDBFullAccessRole:
     Type: AWS::IAM::Role
@@ -93,7 +94,7 @@ Resources:
                   - "dynamodb:ListStreams"
                 Resource:
                   - !GetAtt serviceDetail.Arn
-                  - Fn::GetAtt: [ serviceDetail , StreamArn ]
+                  - !GetAtt serviceDetail.StreamArn
   serviceDetail:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -128,9 +129,9 @@ Resources:
       BatchSize: 1
       Enabled: True
       EventSourceArn:
-        Fn::GetAtt: [ serviceDetail , StreamArn ]
+        !GetAtt serviceDetail.StreamArn
       FunctionName:
-        Fn::GetAtt: [ serviceTrackFunction , Arn ]
+        !GetAtt serviceTrackFunction.Arn
       StartingPosition: LATEST
   sendMailFunction:
     Type: AWS::Lambda::Function
@@ -340,4 +341,4 @@ Outputs :
     Value: !GetAtt CFNKeys.SecretAccessKey
   serviceDetailTable:
     Description: "Service detail Table"
-    Value: !GetAtt serviceDetailTable
+    Value: !GetAtt serviceDetail.Arn
