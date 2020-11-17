@@ -55,18 +55,32 @@ if (id) {
 	    if (argv.debug) {
 		console.log("data",data)
 	    }
-	    if (argv["all-parameters"])  {
-		var answer = {};
-		Object.keys(data.Item).map(x => {  answer[x] = data.Item[x].S ;});
-		console.log(answer);
-	    } else if (!argv["parameters"]) {
-		console.log(data.Item.status.S);
-	    } else {
-		var answer = {};
-		argv.parameters.split(",").map( x => {  answer[x] = data.Item[x].S ;});
-		console.log(answer);
-						
-	    }
+            try {
+              if (data && data.Item) {
+		  if (argv["all-parameters"])  {
+		      var answer = {};
+		      Object.keys(data.Item).map(x => {  answer[x] = data.Item[x].S ;});
+		      console.log(answer);
+		  } else if (!argv["parameters"]) {
+                      if (data.Item.hasOwnProperty("status")) {
+			  console.log(data.Item.status.S);
+                      } else {
+			  console.log("no status yet...");
+                      }
+		  } else {
+		      var answer = {};
+		      argv.parameters.split(",").map( x => {  answer[x] = data.Item[x].S ;});
+		      console.log(answer);
+		  }
+	      }
+		else {
+		    console.log("no data");   
+		}
+             }
+             catch(err) {
+               console.log('problem occured with error',err);
+               console.log(data);
+             }
 	    
 	}
     });

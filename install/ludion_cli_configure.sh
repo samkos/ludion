@@ -55,6 +55,9 @@ else
     cd ../API/unix
     chmod +x  ./xxxService
     npm i
+    echo ZZZZZ fixing text-table to be able to print null
+    mv node_modules/text-table/index.js node_modules/text-table/index.js.orig
+    cp ../../install/text-table-fix.js node_modules/text-table/index.js
     export PATH=PATH:$PWD:$PATH
     export LUDION_CMD_DIR=$PWD
     cd -

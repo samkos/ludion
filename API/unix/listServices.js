@@ -29,32 +29,44 @@ if (user && !id && user !=="all") { filter = filter + `, user:{eq:"${user}"}`}
 if (service && !id) { filter = filter + `, service:{eq:"${service}"}`}
 if (instance && !id) { filter = filter + `, instance:{eq:"${instance}"}`}
 
+
 const query = `
 query ls{
-  listServices(limit:10)
+  listServices(filter:{
+    ${filter}
+    })
     {
       items {
-        id
+        ${ argv.long  && argv.is_admin ? "id" : ""}
         machine
         service
         instance
         status
         step
-        user
+        ${ argv.user_as_param ? "user" : ""}
+        ${ argv.long ? "endpoint\njobid\ndescription" : ""}
       }
   }
 }
 `;
 
-if (argv.debug) { console.log('query',query);} 
+
+if (argv.debug) {
+  console.log('query',query);
+  console.log('operation',graphqlOperation(query))
+  console.log(argv);
+} 
 
 const jsonToTable = require('json-to-table');
 const tableToTxt = require('text-table');
 
+
 API.graphql(graphqlOperation(query))
     .then(data => {
-      console.log("data",data);
-      console.log("data.items",data.items);
+      if (argv.debug) {
+	  console.log("data",data);
+	  console.log("data.items",data.data.listServices.items);
+      }
       console.log(argv.json ? data.data.listServices.items :
         tableToTxt(jsonToTable(data.data.listServices.items)))
       })
