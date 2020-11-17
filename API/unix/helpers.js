@@ -9,14 +9,14 @@ const LUDION_ADMINISTRATORS = ',samy,kortass,';
 // const LUDION_ADMINISTRATORS = '';
 var is_admin = LUDION_ADMINISTRATORS.indexOf(`,${process.env.USER},`)>-1;
 
-const { serviceTable, aws_project_region, aws_user_pools_id } = require('./aws-exports').default;
+const { serviceTable, serviceDetailTable, aws_appsync_region, aws_user_pools_id } = require('./aws-exports').default;
 
 
 
 // Load the AWS SDK for JS
 var AWS = require("aws-sdk");
 
-AWS.config.update({region: aws_project_region});
+AWS.config.update({region: aws_appsync_region});
 AWS.config.loadFromPath('./service-updater.json');
 
 AWS.config.apiVersions = {
@@ -132,3 +132,8 @@ module.exports.documentClient = documentClient;
 module.exports.currentDateTime = currentDateTime;
 module.exports.commandLineBase = commandLineBase;
 module.exports.checkArgv = checkArgv;
+module.exports.serviceTable = serviceTable;
+module.exports.serviceDetailTable = serviceDetailTable;
+module.exports.region = aws_appsync_region;
+module.exports.user_pools_id = aws_user_pools_id;
+

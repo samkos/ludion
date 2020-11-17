@@ -2,8 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-const { commandLineBase, checkArgv, SERVICE_REQUIRED, documentClient } = require('./helpers');
-const { serviceDetailTable, aws_project_region } = require('./aws-exports').default;
+const { commandLineBase, serviceDetailTable, checkArgv, SERVICE_REQUIRED, documentClient } = require('./helpers');
 
 var argv = commandLineBase()
     .usage('Usage: updateService --service <serviceName> --instance <instanceName>'

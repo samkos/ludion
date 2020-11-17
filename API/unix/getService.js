@@ -2,9 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-const { commandLineBase, checkArgv, SERVICE_REQUIRED } = require('./helpers');
-const { serviceTable, aws_project_region } = require('./aws-exports').default;
-
+const { commandLineBase, serviceDetailTable, region, checkArgv, SERVICE_REQUIRED } = require('./helpers');
 
 var argv = commandLineBase()
     .usage('Usage: getService --service <serviceName> --instance <instanceName>'
@@ -33,7 +31,7 @@ if (argv.debug) {
 
 var AWS = require("aws-sdk");
 
-AWS.config.update({region: aws_project_region });
+AWS.config.update({region });
 AWS.config.loadFromPath('./service-updater.json');
 
 // Create the Service interface for DynamoDB
@@ -47,7 +45,7 @@ if (id) {
 	Key: {
             "id": {"S": id}, 
 	}, 
-	TableName: serviceTable
+	TableName: serviceDetailTable
     };
     dynamodb.getItem(params, function(err, data) {
 	if (err) {

@@ -31,20 +31,16 @@ if (instance && !id) { filter = filter + `, instance:{eq:"${instance}"}`}
 
 const query = `
 query ls{
-  
-  listServices(filter:{
-    ${filter}
-    })
+  listServices(limit:10)
     {
       items {
-        ${ argv.long  && argv.is_admin ? "id" : ""}
+        id
         machine
         service
         instance
         status
         step
-        ${ argv.user_as_param ? "user" : ""}
-        ${ argv.long ? "endpoint\njobid\ndescription" : ""}
+        user
       }
   }
 }

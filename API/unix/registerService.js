@@ -3,8 +3,7 @@
 // license that can be found in the LICENSE file.
 
 const { documentClient, commandLineBase, currentDateTime,
-        checkArgv, SERVICE_REQUIRED } = require('./helpers');
-const { serviceDetailTable, aws_project_region } = require('./aws-exports').default;
+        serviceDetailTable, checkArgv, SERVICE_REQUIRED } = require('./helpers');
 
 var argv = commandLineBase()
     .usage('Usage: $0 --service [serviceName] --instance [instanceName]')
