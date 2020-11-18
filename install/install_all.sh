@@ -1,5 +1,5 @@
 echo ---------- 1. init
-bash ../install/amplify_init.sh
+bash ../install/amplify_init.sh expect
 echo ---------- 2. add api
 ../install/amplify_add_api.sh
 echo ---------- 3. add auth
