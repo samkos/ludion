@@ -25,9 +25,11 @@ echo stack_already_updated:$stack_already_updated, stack_already_created:$stack_
 if [[ -n $stack_already_created || -n $stack_already_created ]]; then
     echo Stack $STACK already exists... updating it
     aws  cloudformation update-stack --template-body file://$TEMPLATEFILE --capabilities CAPABILITY_IAM --capabilities CAPABILITY_NAMED_IAM  --stack-name $STACK --parameters ParameterKey=endpointParameter,ParameterValue=$endpoint  ParameterKey=apikeyParameter,ParameterValue=$apikey ParameterKey=userNameParameter,ParameterValue=ludionAdmin$STACK ParameterKey=serviceTableParameter,ParameterValue=$serviceTableArn
+        aws cloudformation wait stack-update-complete --stack-name STACK --no-paginate --output text
 else
     echo creating Stack $STACK...
     aws  cloudformation create-stack --template-body file://$TEMPLATEFILE --capabilities CAPABILITY_IAM --capabilities CAPABILITY_NAMED_IAM  --stack-name $STACK --parameters ParameterKey=endpointParameter,ParameterValue=$endpoint  ParameterKey=apikeyParameter,ParameterValue=$apikey ParameterKey=userNameParameter,ParameterValue=ludionAdmin$STACK ParameterKey=serviceTableParameter,ParameterValue=$serviceTableArn
+    aws cloudformation wait stack-create-complete --stack-name STACK --no-paginate --output text
 fi
 
 
