@@ -46,9 +46,14 @@ set timeout -1
 spawn amplify add api
 match_max 100000
 send -- "\r"
-expect -exact "Please select from one of the below mentioned services:\[22m\[0m \[0m\[36mGraphQL\[39m\[65D\[65C\r"
+expect -exact "\r
+\[?25l\[32m?\[39m \[1mPlease select from one of the below mentioned services:\[22m\[0m \[0m\[2m(Use arrow keys)\[22m\r
+\[36m❯ GraphQL\[39m \r
+  REST \[7D\[7C\[2K\[1A\[2K\[1A\[2K\[G\[32m?\[39m \[1mPlease select from one of the below mentioned services:\[22m\[0m \[0m\[36mGraphQL\[39m\[65D\[65C\r
+\[?25h\[32m?\[39m \[1mProvide API name:\[22m\[0m \[0m\[2m(ludionexpect) \[22m\[35D\[35C"
 send -- "\r"
-expect -exact "Choose the default authorization type for the API\[22m\[0m \[0m\[2m(Use arrow keys)\[22m\r
+expect -exact "\[2K\[G\[32m?\[39m \[1mProvide API name:\[22m\[0m \[0m\[36mludionexpect\[39m\[32D\[32C\r
+\[?25l\[32m?\[39m \[1mChoose the default authorization type for the API\[22m\[0m \[0m\[2m(Use arrow keys)\[22m\r
 \[36m❯ API key\[39m \r
   Amazon Cognito User Pool \r
   IAM \r
@@ -68,6 +73,7 @@ send -- "\r"
 expect -exact "\[2K\[1A\[2K\[1A\[2K\[G\[32m?\[39m \[1mDo you want to configure advanced settings for the GraphQL API\[22m\[0m \[0m\[36mNo, I am done.\[39m\[79D\[79C\r
 \[?25h\[32m?\[39m \[1mDo you have an annotated GraphQL schema?\[22m\[0m \[0m\[2m(y/N) \[22m\[49D\[49C"
 send -- "y\r"
-expect -exact "\[2K\[G\[32m?\[39m \[1mProvide your schema file path:\[22m\[0m \[0ma\[34D\[34C"
+expect -exact "\[2K\[G\[32m?\[39m \[1mDo you have an annotated GraphQL schema?\[22m\[0m \[0m\[36mYes\[39m\[46D\[46C\r
+\[32m?\[39m \[1mProvide your schema file path:\[22m\[0m \[0m\[33D\[33C"
 send -- "amplify_schema/schema.graphql\r"
 expect eof
