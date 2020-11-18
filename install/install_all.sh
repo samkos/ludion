@@ -13,4 +13,4 @@ echo ---------- 6. hosting add
 echo ---------- 7. publish
 ../install/amplify_publish.sh
 echo ---------- 8. add cli
-bash ../install/ludion_cli_configure
+bash ../install/ludion_cli_configure.sh
