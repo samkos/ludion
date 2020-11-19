@@ -45,15 +45,8 @@ if {$force_conservative} {
 set timeout -1
 spawn amplify hosting add
 match_max 100000
-expect -exact "\[?25l\[32m?\[39m \[1mSelect the plugin module to execute\[22m\[0m \[0m\[2m(Use arrow keys)\[22m\r
-\[36m❯ Hosting with Amplify Console (Managed hosting with custom domains, Continuous deployment)\[39m \r
-  Amazon CloudFront and S3 \[27D\[27C"
+expect "Amazon CloudFront and S3 \[27D\[27C"
 send -- "\r"
-expect -exact "\[2K\[1A\[2K\[1A\[2K\[G\[32m?\[39m \[1mSelect the plugin module to execute\[22m\[0m \[0m\[36mHosting with Amplify Console (Managed hosting with custom domain\r
-s, Continuous deployment)\[39m\[25D\[25C\r
-\[?25h\[?25l\[36m⠋\[39m \[2K\[1G\[36m⠙\[39m \[2K\[1G\[36m⠹\[39m \[2K\[1G\[36m⠸\[39m \[2K\[1G\[36m⠼\[39m \[2K\[1G\[36m⠴\[39m \[2K\[1G\[36m⠦\[39m \[2K\[1G\[36m⠧\[39m \[2K\[1G\[36m⠇\[39m \[2K\[1G\[36m⠏\[39m \[2K\[1G\[?25h\[?25l\[32m?\[39m \[1mChoose a \[31mtype\[39m\[22m\[0m \[0m\[2m(Use arrow keys)\[22m\r
-  Continuous deployment (Git-based deployments) \r
-\[36m❯ Manual deployment\[39m \r
-  Learn more \[13D\[13C"
+expect "Choose *  Learn more \[13D\[13C"
 send -- "\r"
 expect eof
