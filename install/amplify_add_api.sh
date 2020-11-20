@@ -61,7 +61,7 @@ expect -exact "\[2K\[G\[32m?\[39m \[1mProvide API name:\[22m\[0m \[0m\[
 send -- "\r"
 expect -exact "\[2K\[1A\[2K\[1A\[2K\[1A\[2K\[1A\[2K\[G\[32m?\[39m \[1mChoose the default authorization type for the API\[22m\[0m \[0m\[36mAPI key\[39m\[59D\[59C\r
 \[?25h\[32m?\[39m \[1mEnter a description for the API key:\[22m\[0m \[0m\[39D\[39C"
-send -- "ludion expect\r"
+send -- "ludion\r"
 expect -exact "\[2K\[G\[32m?\[39m \[1mEnter a description for the API key:\[22m\[0m \[0m\[36mludion expect\[39m\[52D\[52C\r
 \[32m?\[39m \[1mAfter how many days from now the API key should expire (1-365):\[22m\[0m \[0m\[2m(7) \[22m\[70D\[70C"
 send -- "365\r"
