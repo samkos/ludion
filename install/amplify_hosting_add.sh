@@ -48,4 +48,12 @@ sleep 3
 send -- "\r"
 sleep 2
 send -- "\r"
+sleep 2
+send -- "\r"
+sleep 2
+send -- "\r"
+sleep 2
+send -- "\r"
+sleep 2
+send -- "\r"
 expect eof
