@@ -44,8 +44,7 @@ if {$force_conservative} {
 
 set timeout -1
 spawn amplify add auth
-match_max 100000
-sleep 2
+sleep 10
 send -- "\r"
 sleep 2
 send -- "\r"

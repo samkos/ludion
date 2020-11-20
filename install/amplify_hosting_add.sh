@@ -44,7 +44,7 @@ if {$force_conservative} {
 
 set timeout -1
 spawn amplify hosting add
-sleep 3
+sleep 13
 send -- "\r"
 sleep 2
 send -- "\r"
