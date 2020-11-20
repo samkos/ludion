@@ -1,6 +1,6 @@
 echo installing additional resources in the cloud...
 STACK=`cat .stack_name`
-STACKNAME=ludion-$SUFFIX
+STACKNAME=ludion-$STACK
 
 endpoint=`jq -r ".api.ludion$STACK.output.GraphQLAPIEndpointOutput" ../ludion/amplify/backend/amplify-meta.json`
 apikey=`jq -r ".api.ludion$STACK.output.GraphQLAPIKeyOutput" ../ludion/amplify/backend/amplify-meta.json`
@@ -19,17 +19,25 @@ echo aws  cloudformation create-stack --template-body file://$TEMPLATEFILE --cap
 
 stack_already_created=`aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE | jq -r '.StackSummaries | .[] | select(.StackName=="$STACKNAME").StackStatus'`
 stack_already_updated=`aws cloudformation list-stacks --stack-status-filter UPDATE_COMPLETE | jq -r '.StackSummaries | .[] | select(.StackName=="$STACKNAME").StackStatus'`
+stack_rollback_complete=`aws cloudformation list-stacks --stack-status-filter ROLLBACK_COMPLETE | jq -r '.StackSummaries | .[] | select(.StackName=="$STACKNAME").StackStatus'`
 
 
-echo stack_already_updated:$stack_already_updated, stack_already_created:$stack_already_created
+aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE   | jq -r '.StackSummaries | .[] | .StackName' | grep $STACKNAME > .scan.out
+aws cloudformation list-stacks --stack-status-filter UPDATE_COMPLETE   | jq -r '.StackSummaries | .[] | .StackName' | grep $STACKNAME >> .scan.out
+aws cloudformation list-stacks --stack-status-filter ROLLBACK_COMPLETE | jq -r '.StackSummaries | .[] | .StackName' | grep $STACKNAME >> .scan.out
+cat .scan.out
+stack_already_created=`grep $STACKNAME  .scan.out`
 
-if [[ -n $stack_already_created || -n $stack_already_created ]]; then
-    echo Stack $STACK already exists... updating it
+
+if [[ -n $stack_already_created ]]; then
+    echo Stack $STACKNAME already exists... updating it
     aws  cloudformation update-stack --template-body file://$TEMPLATEFILE --capabilities CAPABILITY_IAM --capabilities CAPABILITY_NAMED_IAM  --stack-name $STACKNAME --parameters ParameterKey=endpointParameter,ParameterValue=$endpoint  ParameterKey=apikeyParameter,ParameterValue=$apikey ParameterKey=userNameParameter,ParameterValue=ludionAdmin$STACK ParameterKey=serviceTableParameter,ParameterValue=$serviceTableArn
-        aws cloudformation wait stack-update-complete --stack-name $STACKNAME --no-paginate --output text
+    echo Waiting for completion...
+    aws cloudformation wait stack-update-complete --stack-name $STACKNAME --no-paginate --output text
 else
-    echo creating Stack $STACK...
+    echo creating Stack $STACKNAME...
     aws  cloudformation create-stack --template-body file://$TEMPLATEFILE --capabilities CAPABILITY_IAM --capabilities CAPABILITY_NAMED_IAM  --stack-name $STACKNAME --parameters ParameterKey=endpointParameter,ParameterValue=$endpoint  ParameterKey=apikeyParameter,ParameterValue=$apikey ParameterKey=userNameParameter,ParameterValue=ludionAdmin$STACK ParameterKey=serviceTableParameter,ParameterValue=$serviceTableArn
+    echo Waiting for completion...
     aws cloudformation wait stack-create-complete --stack-name $STACKNAME --no-paginate --output text
 fi
 
