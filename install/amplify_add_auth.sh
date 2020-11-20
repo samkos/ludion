@@ -45,32 +45,12 @@ if {$force_conservative} {
 set timeout -1
 spawn amplify add auth
 match_max 100000
+sleep 2
 send -- "\r"
-expect -exact "\r
-\[0mUsing service: Cognito, provided by: awscloudformation\[0m\r
-\[?25l \[32m\[39m\r
-\[32m The current configured provider is Amazon Cognito. \[39m\r
-\[32m\[39m \r
- \[1mDo you want to use the default authentication and security configuration?\[22m\[0m \[0m\[2m(Use arrow keys)\[22m\r
-\[36m❯ Default configuration\[39m \r
-  Default configuration with Social Provider (Federation) \r
-  Manual configuration \r
-  I want to learn more. \[24D\[24C\[2K\[1A\[2K\[1A\[2K\[1A\[2K\[1A\[2K\[1A\[2K\[1A\[2K\[1A\[2K\[G \[32m\[39m\r
-\[32m The current configured provider is Amazon Cognito. \[39m\r
-\[32m\[39m \r
- \[1mDo you want to use the default authentication and security configuration?\[22m\[0m \[0m\[36mDefault configuration\[39m\[96D\[96C\r
-\[?25h\[?25l \[31mWarning: you will not be able to edit these selections.\[39m \r
- \[1mHow do you want users to be able to sign in?\[22m\[0m \[0m\[2m(Use arrow keys)\[22m\r
-\[36m❯ Username\[39m \r
-  Email \r
-  Phone Number \r
-  Email or Phone Number \r
-  I want to learn more. \[24D\[24C"
+sleep 2
 send -- "\r"
-expect -exact "\[2K\[1A\[2K\[1A\[2K\[1A\[2K\[1A\[2K\[1A\[2K\[1A\[2K\[G \[31mWarning: you will not be able to edit these selections.\[39m \r
- \[1mHow do you want users to be able to sign in?\[22m\[0m \[0m\[36mUsername\[39m\[54D\[54C\r
-\[?25h\[?25l \[1mDo you want to configure advanced settings?\[22m\[0m \[0m\[2m(Use arrow keys)\[22m\r
-\[36m❯ No, I am done.\[39m \r
-  Yes, I want to make some additional changes. \[47D\[47C"
+sleep 2
+send -- "\r"
+sleep 2
 send -- "\r"
 expect eof

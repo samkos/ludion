@@ -44,9 +44,8 @@ if {$force_conservative} {
 
 set timeout -1
 spawn amplify hosting add
-match_max 100000
-expect "Amazon CloudFront and S3 \[27D\[27C"
+sleep 3
 send -- "\r"
-expect "Choose *  Learn more \[13D\[13C"
+sleep 2
 send -- "\r"
 expect eof
