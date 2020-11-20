@@ -44,36 +44,20 @@ if {$force_conservative} {
 
 set timeout -1
 spawn amplify add api
-match_max 100000
+sleep 3
 send -- "\r"
-expect -exact "\r
-\[?25l\[32m?\[39m \[1mPlease select from one of the below mentioned services:\[22m\[0m \[0m\[2m(Use arrow keys)\[22m\r
-\[36m❯ GraphQL\[39m \r
-  REST \[7D\[7C\[2K\[1A\[2K\[1A\[2K\[G\[32m?\[39m \[1mPlease select from one of the below mentioned services:\[22m\[0m \[0m\[36mGraphQL\[39m\[65D\[65C\r
-\[?25h\[32m?\[39m \[1mProvide API name:\[22m\[0m \[0m\[2m(ludionexpect) \[22m\[35D\[35C"
+sleep 2
 send -- "\r"
-expect -exact "\[2K\[G\[32m?\[39m \[1mProvide API name:\[22m\[0m \[0m\[36mludionexpect\[39m\[32D\[32C\r
-\[?25l\[32m?\[39m \[1mChoose the default authorization type for the API\[22m\[0m \[0m\[2m(Use arrow keys)\[22m\r
-\[36m❯ API key\[39m \r
-  Amazon Cognito User Pool \r
-  IAM \r
-  OpenID Connect \[17D\[17C"
+sleep 2
 send -- "\r"
-expect -exact "\[2K\[1A\[2K\[1A\[2K\[1A\[2K\[1A\[2K\[G\[32m?\[39m \[1mChoose the default authorization type for the API\[22m\[0m \[0m\[36mAPI key\[39m\[59D\[59C\r
-\[?25h\[32m?\[39m \[1mEnter a description for the API key:\[22m\[0m \[0m\[39D\[39C"
-send -- "ludion\r"
-expect -exact "\[2K\[G\[32m?\[39m \[1mEnter a description for the API key:\[22m\[0m \[0m\[36mludion expect\[39m\[52D\[52C\r
-\[32m?\[39m \[1mAfter how many days from now the API key should expire (1-365):\[22m\[0m \[0m\[2m(7) \[22m\[70D\[70C"
+sleep 2
+send -- "ludion-sk\r"
+sleep 2
 send -- "365\r"
-expect -exact "\[2K\[G\[32m?\[39m \[1mAfter how many days from now the API key should expire (1-365):\[22m\[0m \[0m\[36m365\[39m\[69D\[69C\r
-\[?25l\[32m?\[39m \[1mDo you want to configure advanced settings for the GraphQL API\[22m\[0m \[0m\[2m(Use arrow keys)\[22m\r
-\[36m❯ No, I am done.\[39m \r
-  Yes, I want to make some additional changes. \[47D\[47C"
+sleep 2
 send -- "\r"
-expect -exact "\[2K\[1A\[2K\[1A\[2K\[G\[32m?\[39m \[1mDo you want to configure advanced settings for the GraphQL API\[22m\[0m \[0m\[36mNo, I am done.\[39m\[79D\[79C\r
-\[?25h\[32m?\[39m \[1mDo you have an annotated GraphQL schema?\[22m\[0m \[0m\[2m(y/N) \[22m\[49D\[49C"
+sleep 2
 send -- "y\r"
-expect -exact "\[2K\[G\[32m?\[39m \[1mDo you have an annotated GraphQL schema?\[22m\[0m \[0m\[36mYes\[39m\[46D\[46C\r
-\[32m?\[39m \[1mProvide your schema file path:\[22m\[0m \[0m\[33D\[33C"
+sleep 2
 send -- "amplify_schema/schema.graphql\r"
 expect eof
