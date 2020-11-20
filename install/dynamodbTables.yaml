@@ -98,6 +98,8 @@ Resources:
                 Resource:
                   - !GetAtt serviceDetail.Arn
                   - !GetAtt serviceDetail.StreamArn
+                  - !GetAtt Mail.Arn
+                  - !GetAtt Mail.StreamArn
   serviceDetail:
     Type: AWS::DynamoDB::Table
     Properties:
