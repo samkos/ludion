@@ -11,6 +11,9 @@ Parameters:
     Type: String
   userNameParameter:
     Type: String
+  adminMailParameter:
+    Type: String
+    Default: "samuel.kortas@gmail.com"
   serviceTableParameter:
     Type: String
 Resources:
@@ -95,6 +98,8 @@ Resources:
                 Resource:
                   - !GetAtt serviceDetail.Arn
                   - !GetAtt serviceDetail.StreamArn
+                  - !GetAtt Mail.Arn
+                  - !GetAtt Mail.StreamArn
   serviceDetail:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -133,6 +138,16 @@ Resources:
       FunctionName:
         !GetAtt serviceTrackFunction.Arn
       StartingPosition: LATEST
+  mailTracker:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      BatchSize: 1
+      Enabled: True
+      EventSourceArn:
+        !GetAtt Mail.StreamArn
+      FunctionName:
+        !GetAtt sendMailFunction.Arn
+      StartingPosition: LATEST
   sendMailFunction:
     Type: AWS::Lambda::Function
     Properties:
@@ -143,7 +158,7 @@ Resources:
       Timeout: 120
       Environment:
         Variables:
-          serviceDetailTable: !GetAtt serviceDetail.Arn
+          adminMail: !Ref adminMailParameter
       Code:
         ZipFile: |
            /* nothing yet */
@@ -174,7 +189,7 @@ Resources:
                        Subject: { Data: subject
                        }
                    },
-                   Source: "samuel.kortas@gmail.com"
+                   Source: process.env['adminMail']
                };
 
                

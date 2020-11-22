@@ -39,7 +39,7 @@ if (argv.file) {
 
 function sendMail(to, subject, message) {
   var params = {
-      TableName: "Mail",
+      TableName: "ludion-Mail-EABV9UKZ3M1Q",
       Item: {
         "id" : currentDateTime() + '/' +argv.user,
         "subject": `${subject}`,
