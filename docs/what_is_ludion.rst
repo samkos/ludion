@@ -14,8 +14,9 @@ publish his new service and any relevant data related on a centralized
 dashboard.
 
 
+Developed by the KAUST Supercomputing Laboratory,
 *Ludion* is released as an Open Source Software under BSD Licence.
-It is available at http://github.org/samkos/ludion
+It is available at http://github.com/samkos/ludion
 
 Features
 --------

@@ -35,9 +35,9 @@ Installing *Ludion*
   connected Resources to connect to this centralized dashboard.
 
 Current source is available on  Github, use the following command to retrieve
-the latest stable version from the repository.
+the latest stable version from the repository:
 ::
-  $ git clone https://github.com/samkos/ludion.git
+ $ git clone https://github.com/samkos/ludion.git
 
 Installing *Ludion* Centralized Services
 ----------------------------------------
@@ -88,6 +88,7 @@ only required.
 ::
    $ git clone https://github.com/samkos/ludion.git LUDION_TEST
 
+
 2. Initialize the amplify environment
 ::
    $ cd LUDION_TEST/ludion
@@ -131,7 +132,7 @@ only required.
 3. Add the GraphQL API, providing the model schema from amplify_schema/schema.graphql and setting the expiration time of the API key to 365 days not to have to change it too often.
 ::
   $ amplify add api
-  
+
 .. image:: images/amplifyAddApi.png
 
 4. Link to an authentication via cognito user pool
